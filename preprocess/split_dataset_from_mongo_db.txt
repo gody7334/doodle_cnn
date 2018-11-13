@@ -1,0 +1,32 @@
+
+# add parent folder as root folder
+import os, sys, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
+
+import os
+import pandas as pd
+import numpy as np
+from utils.mongodb_conn import *
+from utils.mongodb_conn import _connect_mongo
+
+path_train = '../../data/train_simplified/'
+train_files = next(os.walk(path_train))[2]
+
+for tf in train_files:
+    tf.replace('.csv','')
+    print(tf)
+    df = sample_mongo(
+        db='dataset',
+        collection='doodle_quickdraw',
+        query={'word':tf},
+        host='localhost',
+        port=27017,
+        username=None,
+        password=None,
+        no_id=True,
+        num_sample=10)
+    os.exit()
+
+df
